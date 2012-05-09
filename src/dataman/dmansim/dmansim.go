@@ -23,23 +23,28 @@ func main() {
                         continue
                 }
                 fmt.Println("connection accepted")
-                connected := make(chan bool)
-                go session(conn, connected)
-                <-connected
+                //connected := make(chan bool)
+                session(conn)
+                //<-connected
         }
 }
 
-func session(conn *net.TCPConn, connected chan bool) {
+func session(conn *net.TCPConn) {
+        fmt.Println("here");
         var buf[2048]byte
         code := 0
         for {
 	        t := time.Now().Add(time.Millisecond*100)
                 conn.SetReadDeadline(t)
                 n, err := conn.Read(buf[:])
-                if err != nil && !err.(net.Error).Timeout() {
+                e, ok := err.(net.Error)
+
+                if err != nil && ok && !e.Timeout() {
                         fmt.Println(err)
                         break
-                } else if n > 0 {
+                }
+
+                if n > 0 {
                         process(conn, buf[:n])
                 } else {
                         msg := fmt.Sprintf("%v", code)
@@ -47,7 +52,6 @@ func session(conn *net.TCPConn, connected chan bool) {
                         conn.Write([]byte(msg))
                 }
         }
-        connected <- false
         fmt.Println("session ended")
 }
 
