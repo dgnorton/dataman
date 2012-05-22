@@ -1,0 +1,53 @@
+package main
+
+import (
+	"fmt"
+	"net"
+)
+
+func main() {
+	//var buf [2048]byte
+
+	uc, ue := net.DialUDP("udp", nil, &net.UDPAddr{
+		IP:   net.IPv4bcast,
+		Port: 1069,
+	})
+	if ue != nil {
+		fmt.Println(ue)
+	}
+
+	//if uce == nil {
+		_, e := uc.WriteToUDP([]byte("CGNM\x04@\x02"), &net.UDPAddr{
+			IP: net.IPv4zero,
+			Port: 1069,
+		})
+		if e != nil {
+			fmt.Println(e)
+		}
+
+		//c, e := net.ListenUDP("udp", &net.UDPAddr{
+		//	IP:   net.IPv4zero,
+		//	Port: 1069,
+		//})
+		//_, _, re := c.ReadFrom(buf[:])
+		//if re != nil {
+		//	fmt.Println("error in ReadFrom")
+		//}
+		//fmt.Printf("%v\n", buf[:n])
+	//} else {
+	//	fmt.Println(uce)
+	//}
+	//c, e := net.Dial("tcp", "192.168.0.102:23")
+	//if e != nil {
+	//	fmt.Println("error connecting")
+	//	return
+	//}
+	//c.Write([]byte("||0:1326>GET DEVICE.TYPE\r\n"))
+	//n, err := c.Read(buf[:])
+	//if err == nil {
+	//	fmt.Printf("%v\n", string(buf[:n]))
+	//} else {
+	//	fmt.Println("error reading")
+	//}
+	//c.Close()
+}

@@ -1,0 +1,19 @@
+package main
+
+import (
+        "net"
+        "log"
+)
+
+func main() {
+	var buf [2048]byte 
+        conn, err := net.Dial("udp", "192.168.0.255:1069")
+        //conn, err := net.Dial("udp", "255.255.255.255:1069")
+        if err != nil {
+                log.Fatalf("dial: %s", err)
+        }
+        log.Print(conn.Write([]byte("CGNM\x04@\x02\x00\x00")))
+	n, _ := conn.Read(buf[:])
+	log.Print(buf[:n])
+}
+
